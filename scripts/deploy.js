@@ -1,5 +1,5 @@
 async function main() {
-  // Get the deployer's account details
+  // Retrieve the deployer's account
   const [deployer] = await ethers.getSigners();
   const deployerAddress = await deployer.getAddress();
   console.log("Deploying contracts with account:", deployerAddress);
@@ -8,12 +8,15 @@ async function main() {
   const balance = await ethers.provider.getBalance(deployerAddress);
   console.log("Account balance:", balance.toString());
 
-  // Get the contract factory and deploy the contract
-  const Greeter = await ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
+  // Get the contract factory for the CircularMarketplace contract
+  const CircularMarketplace = await ethers.getContractFactory("CircularMarketplace");
+  
+  // Deploy the contract (no constructor parameters needed)
+  const circularMarketplace = await CircularMarketplace.deploy();
 
-  await greeter.deployed(); // Wait until deployment is complete
-  console.log("Greeter deployed to:", greeter.address);
+  // Wait until the deployment is complete (ethers v6 uses waitForDeployment)
+  await circularMarketplace.waitForDeployment();
+  console.log("CircularMarketplace deployed to:", circularMarketplace.target);
 }
 
 main()
